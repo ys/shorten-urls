@@ -10,17 +10,13 @@
 (def server1-conn {:pool {} :spec {}})
 (defmacro wcar* [& body] `(car/wcar server1-conn ~@body))
 
-(defn get-url [key]
-  (wcar* (car/hget "short.urls" key))
-)
+(defn get-url [key] (wcar* (car/hget "short.urls" key)))
 
 (defn add-url [key url]
  (wcar* (car/hset "short.urls" key url))
 )
 
-(defn delete-url [key]
-  (wcar* (car/hdel "short.urls" key))
-)
+(defn delete-url [key] (wcar* (car/hdel "short.urls" key)))
 
 (defn redirect-to-full-url [req]
   (let [key (-> req :params :key)]
