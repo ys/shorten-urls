@@ -6,6 +6,7 @@
 (use '[compojure.route :only [files not-found]]
      '[compojure.handler :only [site]] ; form, query params decode; cookie; session, etc
      '[compojure.core :only [defroutes GET POST DELETE ANY context]]
+     'clostache.parser
      'org.httpkit.server)
 
 (def server1-conn {:pool {} :spec {}})
@@ -21,6 +22,8 @@
 )
 
 (defn delete-url [key] (wcar* (car/hdel "short.urls" key)))
+
+(defn home [req] (render-resource "templates/home.mustache" {}))
 
 (defn redirect-to-full-url [req]
   (let [key (-> req :params :key)]
@@ -39,14 +42,12 @@
 
 (defn create-new-link [req]
   (let [url (-> req :params :url) key (-> req :params :key)]
-    (add-url key url)
-    {:status 200
-    :headers { "Content-Type" "application/json" }
-    :body (str "{" key ": " url "}") }
+     (render-resource "templates/link.mustache" {:key (add-url url) :url url })
   )
 )
 
 (defroutes all-routes
+  (GET "/" [] home)
   (GET "/:key" [] redirect-to-full-url)
   (DELETE "/:key" [] remove-key)
   (POST "/" [] create-new-link))
