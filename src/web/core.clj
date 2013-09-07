@@ -2,6 +2,7 @@
   (:gen-class)
   (:require [taoensso.carmine :as car :refer (wcar)]))
 
+(import java.security.SecureRandom)
 (use '[compojure.route :only [files not-found]]
      '[compojure.handler :only [site]] ; form, query params decode; cookie; session, etc
      '[compojure.core :only [defroutes GET POST DELETE ANY context]]
@@ -12,8 +13,11 @@
 
 (defn get-url [key] (wcar* (car/hget "short.urls" key)))
 
-(defn add-url [key url]
- (wcar* (car/hset "short.urls" key url))
+(defn add-url [url]
+  (let [key (subs (.toString (BigInteger. 130 (SecureRandom.)) 32) 0 7)]
+    (wcar* (car/hset "short.urls" key url))
+    key
+  )
 )
 
 (defn delete-url [key] (wcar* (car/hdel "short.urls" key)))
