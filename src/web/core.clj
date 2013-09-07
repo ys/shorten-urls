@@ -1,8 +1,10 @@
 (ns web.core
   (:gen-class)
+  ; require = Import other namespace to use it (can alias)
   (:require [taoensso.carmine :as car :refer (wcar)]))
-
+; use for java:)
 (import java.security.SecureRandom)
+; Use = use namespaces like they are yours
 (use '[compojure.route :only [files not-found]]
      '[compojure.handler :only [site]] ; form, query params decode; cookie; session, etc
      '[compojure.core :only [defroutes GET POST DELETE ANY context]]
