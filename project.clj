@@ -6,5 +6,6 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [com.taoensso/carmine "2.2.0"]
                  [compojure "1.1.5"]
-                 [http-kit "2.1.10"]]
+                 [http-kit "2.1.10"]
+                 [de.ubercode.clostache/clostache "1.3.1"]]
   :main web.core)
